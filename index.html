@@ -23,18 +23,13 @@
             --text: #1A1A1A;
             --text-muted: #6B6B6B;
             --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
             --radius: 16px;
             --radius-sm: 10px;
             --gain-green: #00A651;
             --loss-red: #E53935;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -44,7 +39,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(135deg, var(--heineken-green), var(--heineken-dark));
             color: white;
@@ -56,98 +50,44 @@
             box-shadow: 0 4px 20px rgba(0,132,61,0.3);
         }
 
-        .header h1 {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
+        .header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .header p { font-size: 12px; opacity: 0.85; }
 
-        .header p {
-            font-size: 12px;
-            opacity: 0.85;
-            font-weight: 400;
-        }
+        .content { padding: 0 16px 40px; }
 
-        /* Tabs */
-        .tabs {
+        /* Section divider */
+        .section-title {
             display: flex;
-            gap: 8px;
-            padding: 16px 16px 0;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 12px;
         }
 
-        .tab {
+        .section-title .line {
             flex: 1;
-            padding: 12px 8px;
-            border: none;
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            height: 2px;
+            border-radius: 1px;
+        }
+
+        .section-title .label {
             font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
         }
 
-        .tab.heineken {
-            background: rgba(0,132,61,0.1);
-            color: var(--heineken-green);
-        }
-
-        .tab.heineken.active {
-            background: var(--card-bg);
-            color: var(--heineken-green);
-            box-shadow: var(--shadow);
-        }
-
-        .tab.amstel {
-            background: rgba(200,16,46,0.1);
-            color: var(--amstel-red);
-        }
-
-        .tab.amstel.active {
-            background: var(--card-bg);
-            color: var(--amstel-red);
-            box-shadow: var(--shadow);
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 20%;
-            width: 60%;
-            height: 3px;
-            border-radius: 3px 3px 0 0;
-        }
-
-        .tab.heineken.active::after { background: var(--heineken-green); }
-        .tab.amstel.active::after { background: var(--amstel-red); }
-
-        /* Content */
-        .content {
-            padding: 0 16px 100px;
-        }
-
-        .comparison {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .comparison.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .section-title.heineken .line { background: var(--heineken-green); }
+        .section-title.heineken .label { color: var(--heineken-green); }
+        .section-title.amstel .line { background: var(--amstel-red); }
+        .section-title.amstel .label { color: var(--amstel-red); }
 
         /* Product Cards */
         .products-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 16px;
         }
 
         .product-card {
@@ -163,12 +103,7 @@
         .product-card.amstel { border-color: var(--amstel-red); }
         .product-card.antartica { border-color: var(--antartica-blue); }
 
-        .product-card .brand {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
+        .product-card .brand { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
         .product-card.heineken .brand { color: var(--heineken-green); }
         .product-card.original .brand { color: var(--original-gold); }
         .product-card.amstel .brand { color: var(--amstel-red); }
@@ -182,17 +117,8 @@
             letter-spacing: 0.5px;
         }
 
-        .field {
-            margin-bottom: 10px;
-        }
-
-        .field label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
+        .field { margin-bottom: 10px; }
+        .field label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
 
         .field input {
             width: 100%;
@@ -207,43 +133,29 @@
             -webkit-appearance: none;
         }
 
-        .field input:focus {
-            outline: none;
-            border-color: var(--heineken-green);
-            background: white;
-        }
+        .field input:focus { outline: none; border-color: var(--heineken-green); background: white; }
 
-        .field .unit-price {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-weight: 500;
-        }
+        .field .unit-price { font-size: 11px; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
+        .field .unit-price span { font-weight: 700; color: var(--text); }
 
-        .field .unit-price span {
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        /* Quantity shared */
+        /* Quantity */
         .qty-card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 16px;
+            padding: 14px 16px;
             box-shadow: var(--shadow);
             margin-top: 10px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .qty-card label {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
+        .qty-card .qty-info { flex: 1; }
+        .qty-card .qty-info label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .qty-card .qty-info .helper { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
         .qty-card input {
-            width: 100%;
-            max-width: 200px;
+            width: 110px;
             padding: 10px;
             border: 1.5px solid #E0E0E0;
             border-radius: 8px;
@@ -252,29 +164,16 @@
             color: var(--text);
             text-align: center;
             background: #FAFAFA;
-            margin-top: 6px;
             -webkit-appearance: none;
         }
 
-        .qty-card input:focus {
-            outline: none;
-            border-color: var(--heineken-green);
-            background: white;
-        }
-
-        .qty-card .helper {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
+        .qty-card input:focus { outline: none; border-color: var(--heineken-green); background: white; }
 
         /* Results */
-        .results {
-            margin-top: 16px;
-        }
+        .results { margin-top: 14px; }
 
         .result-header {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -283,50 +182,31 @@
             text-align: center;
         }
 
-        .margin-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .margin-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         .margin-card {
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 14px;
+            padding: 12px;
             box-shadow: var(--shadow);
             text-align: center;
         }
 
-        .margin-card .label {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .margin-card .value {
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        .margin-card .percent {
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 2px;
-        }
+        .margin-card .label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .margin-card .value { font-size: 22px; font-weight: 800; }
+        .margin-card .percent { font-size: 12px; font-weight: 600; margin-top: 2px; }
 
         .margin-card.heineken .value { color: var(--heineken-green); }
         .margin-card.original .value { color: var(--original-gold); }
         .margin-card.amstel .value { color: var(--amstel-red); }
         .margin-card.antartica .value { color: var(--antartica-blue); }
 
-        /* Highlight Result */
+        /* Highlight */
         .highlight-card {
             background: linear-gradient(135deg, #00843D, #00A651);
             border-radius: var(--radius);
-            padding: 20px;
-            margin-top: 12px;
+            padding: 18px;
+            margin-top: 10px;
             text-align: center;
             color: white;
             box-shadow: 0 8px 24px rgba(0,132,61,0.25);
@@ -337,164 +217,26 @@
             box-shadow: 0 8px 24px rgba(200,16,46,0.25);
         }
 
-        .highlight-card .hl-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
-            margin-bottom: 4px;
-        }
+        .highlight-card .hl-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-bottom: 4px; }
+        .highlight-card .hl-diff-unit { font-size: 15px; font-weight: 600; opacity: 0.95; }
+        .highlight-card .hl-total { font-size: 34px; font-weight: 800; margin: 4px 0; line-height: 1; }
+        .highlight-card .hl-desc { font-size: 12px; opacity: 0.85; }
 
-        .highlight-card .hl-diff-unit {
-            font-size: 16px;
-            font-weight: 600;
-            opacity: 0.95;
-        }
-
-        .highlight-card .hl-total {
-            font-size: 36px;
-            font-weight: 800;
-            margin: 6px 0;
-            line-height: 1;
-        }
-
-        .highlight-card .hl-desc {
-            font-size: 12px;
-            opacity: 0.85;
-        }
-
-        /* Breakdown */
-        .breakdown {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-top: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .breakdown-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-size: 13px;
-            border-bottom: 1px solid #F0F0F0;
-        }
-
-        .breakdown-row:last-child {
-            border-bottom: none;
-        }
-
-        .breakdown-row .br-label {
-            color: var(--text-muted);
-        }
-
-        .breakdown-row .br-value {
-            font-weight: 700;
-        }
-
-        .breakdown-row .br-value.positive { color: var(--gain-green); }
-        .breakdown-row .br-value.negative { color: var(--loss-red); }
-
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-state .icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-
-        .empty-state p {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        /* Button reset */
-        .btn-reset {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            margin-top: 16px;
-            border: 1.5px solid #E0E0E0;
-            border-radius: var(--radius-sm);
-            background: transparent;
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-reset:active {
-            background: #F0F0F0;
-        }
-
-        /* VS badge */
-        .vs-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: -6px auto 0;
-            width: 36px;
-            height: 36px;
-            background: var(--text);
-            color: white;
-            border-radius: 50%;
-            font-size: 11px;
-            font-weight: 800;
-            z-index: 2;
-            position: relative;
-        }
-
-        /* Chart bar visual */
+        /* Bars */
         .visual-compare {
-            margin-top: 12px;
+            margin-top: 10px;
             background: var(--card-bg);
             border-radius: var(--radius);
-            padding: 16px;
+            padding: 14px;
             box-shadow: var(--shadow);
         }
 
-        .visual-compare .vc-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
+        .visual-compare .vc-title { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 10px; }
 
-        .bar-group {
-            margin-bottom: 12px;
-        }
-
-        .bar-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .bar-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .bar-track {
-            height: 28px;
-            background: #F0F0F0;
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-        }
+        .bar-group { margin-bottom: 10px; }
+        .bar-group:last-child { margin-bottom: 0; }
+        .bar-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+        .bar-track { height: 26px; background: #F0F0F0; border-radius: 6px; overflow: hidden; }
 
         .bar-fill {
             height: 100%;
@@ -506,13 +248,58 @@
             font-size: 12px;
             font-weight: 700;
             color: white;
-            min-width: 0;
         }
 
         .bar-fill.heineken { background: var(--heineken-green); }
         .bar-fill.original { background: var(--original-gold); }
         .bar-fill.amstel { background: var(--amstel-red); }
         .bar-fill.antartica { background: var(--antartica-blue); }
+
+        /* Breakdown */
+        .breakdown {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-top: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .breakdown-title { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+        .breakdown-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; border-bottom: 1px solid #F0F0F0; }
+        .breakdown-row:last-child { border-bottom: none; }
+        .breakdown-row .br-label { color: var(--text-muted); }
+        .breakdown-row .br-value { font-weight: 700; }
+        .breakdown-row .br-value.positive { color: var(--gain-green); }
+        .breakdown-row .br-value.negative { color: var(--loss-red); }
+
+        /* Divider between sections */
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #D0D0D0, transparent);
+            margin: 24px 0 0;
+        }
+
+        /* Reset */
+        .btn-reset {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: 1.5px solid #E0E0E0;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-reset:active { background: #F0F0F0; }
+
+        /* Empty */
+        .empty-state { text-align: center; padding: 30px 20px; color: var(--text-muted); }
+        .empty-state .icon { font-size: 36px; margin-bottom: 8px; }
+        .empty-state p { font-size: 13px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -522,103 +309,108 @@
     <p>Compare e mostre o ganho real ao seu cliente</p>
 </div>
 
-<div class="tabs">
-    <button class="tab heineken active" onclick="switchTab('heineken')">
-        Heineken x Original
-    </button>
-    <button class="tab amstel" onclick="switchTab('amstel')">
-        Amstel x Antártica
-    </button>
-</div>
-
 <div class="content">
-    <!-- HEINEKEN x ORIGINAL -->
-    <div class="comparison active" id="comp-heineken">
-        <div class="products-row">
-            <div class="product-card heineken">
-                <div class="brand">Heineken</div>
-                <div class="subtitle">Premium</div>
-                <div class="field">
-                    <label>Custo caixa (24un)</label>
-                    <input type="tel" id="h-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
-                    <div class="unit-price">Unit.: <span id="h-custo-unit">R$ 0,00</span></div>
-                </div>
-                <div class="field">
-                    <label>Venda unitário</label>
-                    <input type="tel" id="h-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
-                </div>
-            </div>
-            <div class="product-card original">
-                <div class="brand">Original</div>
-                <div class="subtitle">Mainstream</div>
-                <div class="field">
-                    <label>Custo caixa (24un)</label>
-                    <input type="tel" id="o-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
-                    <div class="unit-price">Unit.: <span id="o-custo-unit">R$ 0,00</span></div>
-                </div>
-                <div class="field">
-                    <label>Venda unitário</label>
-                    <input type="tel" id="o-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
-                </div>
-            </div>
-        </div>
 
-        <div class="qty-card">
-            <label>Quantidade vendida (unidades/mês)</label>
-            <input type="tel" id="h-qty" placeholder="0" oninput="calculate('heineken')">
-            <div class="helper">Total de unidades vendidas no período</div>
-        </div>
-
-        <div class="results" id="results-heineken"></div>
-
-        <button class="btn-reset" onclick="resetForm('heineken')">Limpar campos</button>
+    <!-- SEÇÃO 1: HEINEKEN x ORIGINAL -->
+    <div class="section-title heineken">
+        <div class="line"></div>
+        <span class="label">Heineken x Original</span>
+        <div class="line"></div>
     </div>
 
-    <!-- AMSTEL x ANTÁRTICA -->
-    <div class="comparison" id="comp-amstel">
-        <div class="products-row">
-            <div class="product-card amstel">
-                <div class="brand">Amstel</div>
-                <div class="subtitle">Premium Lager</div>
-                <div class="field">
-                    <label>Custo caixa (24un)</label>
-                    <input type="tel" id="a-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
-                    <div class="unit-price">Unit.: <span id="a-custo-unit">R$ 0,00</span></div>
-                </div>
-                <div class="field">
-                    <label>Venda unitário</label>
-                    <input type="tel" id="a-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
-                </div>
+    <div class="products-row">
+        <div class="product-card heineken">
+            <div class="brand">Heineken</div>
+            <div class="subtitle">Premium</div>
+            <div class="field">
+                <label>Custo caixa (24un)</label>
+                <input type="tel" id="h-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
+                <div class="unit-price">Unit.: <span id="h-custo-unit">R$ 0,00</span></div>
             </div>
-            <div class="product-card antartica">
-                <div class="brand">Antártica</div>
-                <div class="subtitle">Popular</div>
-                <div class="field">
-                    <label>Custo caixa (24un)</label>
-                    <input type="tel" id="ant-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
-                    <div class="unit-price">Unit.: <span id="ant-custo-unit">R$ 0,00</span></div>
-                </div>
-                <div class="field">
-                    <label>Venda unitário</label>
-                    <input type="tel" id="ant-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
-                </div>
+            <div class="field">
+                <label>Venda unitário</label>
+                <input type="tel" id="h-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
             </div>
         </div>
-
-        <div class="qty-card">
-            <label>Quantidade vendida (unidades/mês)</label>
-            <input type="tel" id="a-qty" placeholder="0" oninput="calculate('amstel')">
-            <div class="helper">Total de unidades vendidas no período</div>
+        <div class="product-card original">
+            <div class="brand">Original</div>
+            <div class="subtitle">Mainstream</div>
+            <div class="field">
+                <label>Custo caixa (24un)</label>
+                <input type="tel" id="o-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
+                <div class="unit-price">Unit.: <span id="o-custo-unit">R$ 0,00</span></div>
+            </div>
+            <div class="field">
+                <label>Venda unitário</label>
+                <input type="tel" id="o-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
+            </div>
         </div>
-
-        <div class="results" id="results-amstel"></div>
-
-        <button class="btn-reset" onclick="resetForm('amstel')">Limpar campos</button>
     </div>
+
+    <div class="qty-card">
+        <div class="qty-info">
+            <label>Qtd vendida (un/mês)</label>
+            <div class="helper">Heineken x Original</div>
+        </div>
+        <input type="tel" id="h-qty" placeholder="0" oninput="calculate('heineken')">
+    </div>
+
+    <div class="results" id="results-heineken"></div>
+
+    <!-- DIVISOR -->
+    <div class="section-divider"></div>
+
+    <!-- SEÇÃO 2: AMSTEL x ANTÁRTICA -->
+    <div class="section-title amstel">
+        <div class="line"></div>
+        <span class="label">Amstel x Antártica</span>
+        <div class="line"></div>
+    </div>
+
+    <div class="products-row">
+        <div class="product-card amstel">
+            <div class="brand">Amstel</div>
+            <div class="subtitle">Premium Lager</div>
+            <div class="field">
+                <label>Custo caixa (24un)</label>
+                <input type="tel" id="a-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+                <div class="unit-price">Unit.: <span id="a-custo-unit">R$ 0,00</span></div>
+            </div>
+            <div class="field">
+                <label>Venda unitário</label>
+                <input type="tel" id="a-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+            </div>
+        </div>
+        <div class="product-card antartica">
+            <div class="brand">Antártica</div>
+            <div class="subtitle">Popular</div>
+            <div class="field">
+                <label>Custo caixa (24un)</label>
+                <input type="tel" id="ant-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+                <div class="unit-price">Unit.: <span id="ant-custo-unit">R$ 0,00</span></div>
+            </div>
+            <div class="field">
+                <label>Venda unitário</label>
+                <input type="tel" id="ant-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+            </div>
+        </div>
+    </div>
+
+    <div class="qty-card">
+        <div class="qty-info">
+            <label>Qtd vendida (un/mês)</label>
+            <div class="helper">Amstel x Antártica</div>
+        </div>
+        <input type="tel" id="a-qty" placeholder="0" oninput="calculate('amstel')">
+    </div>
+
+    <div class="results" id="results-amstel"></div>
+
+    <button class="btn-reset" onclick="resetAll()">Limpar todos os campos</button>
+
 </div>
 
 <script>
-    // Money formatting
     function parseMoney(str) {
         if (!str) return 0;
         return parseFloat(str.replace(/[^\d]/g, '')) / 100;
@@ -639,15 +431,6 @@
         return n.toFixed(1).replace('.', ',') + '%';
     }
 
-    // Tab switching
-    function switchTab(tab) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.comparison').forEach(c => c.classList.remove('active'));
-        document.querySelector('.tab.' + tab).classList.add('active');
-        document.getElementById('comp-' + tab).classList.add('active');
-    }
-
-    // Calculate
     function calculate(type) {
         if (type === 'heineken') {
             const hCusto = parseMoney(document.getElementById('h-custo').value);
@@ -722,7 +505,7 @@
         return `
             <div class="empty-state">
                 <div class="icon">📊</div>
-                <p>Preencha os valores de custo e venda<br>para ver a comparação de margens</p>
+                <p>Preencha os valores de custo e venda<br>para ver a comparação</p>
             </div>
         `;
     }
@@ -805,23 +588,15 @@
         `;
     }
 
-    // Reset
-    function resetForm(type) {
-        if (type === 'heineken') {
-            ['h-custo', 'h-venda', 'o-custo', 'o-venda', 'h-qty'].forEach(id => {
-                document.getElementById(id).value = '';
-            });
-            document.getElementById('h-custo-unit').textContent = 'R$ 0,00';
-            document.getElementById('o-custo-unit').textContent = 'R$ 0,00';
-            document.getElementById('results-heineken').innerHTML = '';
-        } else {
-            ['a-custo', 'a-venda', 'ant-custo', 'ant-venda', 'a-qty'].forEach(id => {
-                document.getElementById(id).value = '';
-            });
-            document.getElementById('a-custo-unit').textContent = 'R$ 0,00';
-            document.getElementById('ant-custo-unit').textContent = 'R$ 0,00';
-            document.getElementById('results-amstel').innerHTML = '';
-        }
+    function resetAll() {
+        ['h-custo', 'h-venda', 'o-custo', 'o-venda', 'h-qty', 'a-custo', 'a-venda', 'ant-custo', 'ant-venda', 'a-qty'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+        ['h-custo-unit', 'o-custo-unit', 'a-custo-unit', 'ant-custo-unit'].forEach(id => {
+            document.getElementById(id).textContent = 'R$ 0,00';
+        });
+        document.getElementById('results-heineken').innerHTML = '';
+        document.getElementById('results-amstel').innerHTML = '';
     }
 </script>
 
