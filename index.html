@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Calculadora de Margem | Heineken</title>
+    <meta name="description" content="Compare margens entre Heineken, Amstel, Original e Antártica">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍺</text></svg>">
+    <style>
+        :root {
+            --heineken-green: #00843D;
+            --heineken-dark: #006B31;
+            --amstel-red: #C8102E;
+            --amstel-dark: #A30D25;
+            --original-gold: #C4953A;
+            --original-dark: #A07A2E;
+            --antartica-blue: #003DA5;
+            --antartica-dark: #002D7A;
+            --bg: #F5F5F0;
+            --card-bg: #FFFFFF;
+            --text: #1A1A1A;
+            --text-muted: #6B6B6B;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --gain-green: #00A651;
+            --loss-red: #E53935;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--heineken-green), var(--heineken-dark));
+            color: white;
+            padding: 20px 16px 24px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,132,61,0.3);
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 16px 16px 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab.heineken {
+            background: rgba(0,132,61,0.1);
+            color: var(--heineken-green);
+        }
+
+        .tab.heineken.active {
+            background: var(--card-bg);
+            color: var(--heineken-green);
+            box-shadow: var(--shadow);
+        }
+
+        .tab.amstel {
+            background: rgba(200,16,46,0.1);
+            color: var(--amstel-red);
+        }
+
+        .tab.amstel.active {
+            background: var(--card-bg);
+            color: var(--amstel-red);
+            box-shadow: var(--shadow);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab.heineken.active::after { background: var(--heineken-green); }
+        .tab.amstel.active::after { background: var(--amstel-red); }
+
+        /* Content */
+        .content {
+            padding: 0 16px 100px;
+        }
+
+        .comparison {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .comparison.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Product Cards */
+        .products-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px 12px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid;
+        }
+
+        .product-card.heineken { border-color: var(--heineken-green); }
+        .product-card.original { border-color: var(--original-gold); }
+        .product-card.amstel { border-color: var(--amstel-red); }
+        .product-card.antartica { border-color: var(--antartica-blue); }
+
+        .product-card .brand {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .product-card.heineken .brand { color: var(--heineken-green); }
+        .product-card.original .brand { color: var(--original-gold); }
+        .product-card.amstel .brand { color: var(--amstel-red); }
+        .product-card.antartica .brand { color: var(--antartica-blue); }
+
+        .product-card .subtitle {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .field {
+            margin-bottom: 10px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            background: #FAFAFA;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: var(--heineken-green);
+            background: white;
+        }
+
+        .field .unit-price {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 500;
+        }
+
+        .field .unit-price span {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Quantity shared */
+        .qty-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .qty-card label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .qty-card input {
+            width: 100%;
+            max-width: 200px;
+            padding: 10px;
+            border: 1.5px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            text-align: center;
+            background: #FAFAFA;
+            margin-top: 6px;
+            -webkit-appearance: none;
+        }
+
+        .qty-card input:focus {
+            outline: none;
+            border-color: var(--heineken-green);
+            background: white;
+        }
+
+        .qty-card .helper {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Results */
+        .results {
+            margin-top: 16px;
+        }
+
+        .result-header {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .margin-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .margin-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 14px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .margin-card .label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .margin-card .value {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .margin-card .percent {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .margin-card.heineken .value { color: var(--heineken-green); }
+        .margin-card.original .value { color: var(--original-gold); }
+        .margin-card.amstel .value { color: var(--amstel-red); }
+        .margin-card.antartica .value { color: var(--antartica-blue); }
+
+        /* Highlight Result */
+        .highlight-card {
+            background: linear-gradient(135deg, #00843D, #00A651);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 24px rgba(0,132,61,0.25);
+        }
+
+        .highlight-card.negative {
+            background: linear-gradient(135deg, #C8102E, #E53935);
+            box-shadow: 0 8px 24px rgba(200,16,46,0.25);
+        }
+
+        .highlight-card .hl-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .highlight-card .hl-diff-unit {
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+
+        .highlight-card .hl-total {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 6px 0;
+            line-height: 1;
+        }
+
+        .highlight-card .hl-desc {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        /* Breakdown */
+        .breakdown {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-top: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .breakdown-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-row .br-label {
+            color: var(--text-muted);
+        }
+
+        .breakdown-row .br-value {
+            font-weight: 700;
+        }
+
+        .breakdown-row .br-value.positive { color: var(--gain-green); }
+        .breakdown-row .br-value.negative { color: var(--loss-red); }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Button reset */
+        .btn-reset {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 16px;
+            border: 1.5px solid #E0E0E0;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:active {
+            background: #F0F0F0;
+        }
+
+        /* VS badge */
+        .vs-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -6px auto 0;
+            width: 36px;
+            height: 36px;
+            background: var(--text);
+            color: white;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 800;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* Chart bar visual */
+        .visual-compare {
+            margin-top: 12px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .visual-compare .vc-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .bar-group {
+            margin-bottom: 12px;
+        }
+
+        .bar-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .bar-track {
+            height: 28px;
+            background: #F0F0F0;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.6s ease;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            min-width: 0;
+        }
+
+        .bar-fill.heineken { background: var(--heineken-green); }
+        .bar-fill.original { background: var(--original-gold); }
+        .bar-fill.amstel { background: var(--amstel-red); }
+        .bar-fill.antartica { background: var(--antartica-blue); }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>CALCULADORA DE MARGEM</h1>
+    <p>Compare e mostre o ganho real ao seu cliente</p>
+</div>
+
+<div class="tabs">
+    <button class="tab heineken active" onclick="switchTab('heineken')">
+        Heineken x Original
+    </button>
+    <button class="tab amstel" onclick="switchTab('amstel')">
+        Amstel x Antártica
+    </button>
+</div>
+
+<div class="content">
+    <!-- HEINEKEN x ORIGINAL -->
+    <div class="comparison active" id="comp-heineken">
+        <div class="products-row">
+            <div class="product-card heineken">
+                <div class="brand">Heineken</div>
+                <div class="subtitle">Premium</div>
+                <div class="field">
+                    <label>Custo caixa (24un)</label>
+                    <input type="tel" id="h-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
+                    <div class="unit-price">Unit.: <span id="h-custo-unit">R$ 0,00</span></div>
+                </div>
+                <div class="field">
+                    <label>Venda unitário</label>
+                    <input type="tel" id="h-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
+                </div>
+            </div>
+            <div class="product-card original">
+                <div class="brand">Original</div>
+                <div class="subtitle">Mainstream</div>
+                <div class="field">
+                    <label>Custo caixa (24un)</label>
+                    <input type="tel" id="o-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
+                    <div class="unit-price">Unit.: <span id="o-custo-unit">R$ 0,00</span></div>
+                </div>
+                <div class="field">
+                    <label>Venda unitário</label>
+                    <input type="tel" id="o-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('heineken')">
+                </div>
+            </div>
+        </div>
+
+        <div class="qty-card">
+            <label>Quantidade vendida (unidades/mês)</label>
+            <input type="tel" id="h-qty" placeholder="0" oninput="calculate('heineken')">
+            <div class="helper">Total de unidades vendidas no período</div>
+        </div>
+
+        <div class="results" id="results-heineken"></div>
+
+        <button class="btn-reset" onclick="resetForm('heineken')">Limpar campos</button>
+    </div>
+
+    <!-- AMSTEL x ANTÁRTICA -->
+    <div class="comparison" id="comp-amstel">
+        <div class="products-row">
+            <div class="product-card amstel">
+                <div class="brand">Amstel</div>
+                <div class="subtitle">Premium Lager</div>
+                <div class="field">
+                    <label>Custo caixa (24un)</label>
+                    <input type="tel" id="a-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+                    <div class="unit-price">Unit.: <span id="a-custo-unit">R$ 0,00</span></div>
+                </div>
+                <div class="field">
+                    <label>Venda unitário</label>
+                    <input type="tel" id="a-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+                </div>
+            </div>
+            <div class="product-card antartica">
+                <div class="brand">Antártica</div>
+                <div class="subtitle">Popular</div>
+                <div class="field">
+                    <label>Custo caixa (24un)</label>
+                    <input type="tel" id="ant-custo" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+                    <div class="unit-price">Unit.: <span id="ant-custo-unit">R$ 0,00</span></div>
+                </div>
+                <div class="field">
+                    <label>Venda unitário</label>
+                    <input type="tel" id="ant-venda" placeholder="R$ 0,00" oninput="formatMoney(this); calculate('amstel')">
+                </div>
+            </div>
+        </div>
+
+        <div class="qty-card">
+            <label>Quantidade vendida (unidades/mês)</label>
+            <input type="tel" id="a-qty" placeholder="0" oninput="calculate('amstel')">
+            <div class="helper">Total de unidades vendidas no período</div>
+        </div>
+
+        <div class="results" id="results-amstel"></div>
+
+        <button class="btn-reset" onclick="resetForm('amstel')">Limpar campos</button>
+    </div>
+</div>
+
+<script>
+    // Money formatting
+    function parseMoney(str) {
+        if (!str) return 0;
+        return parseFloat(str.replace(/[^\d]/g, '')) / 100;
+    }
+
+    function formatMoney(input) {
+        let val = input.value.replace(/[^\d]/g, '');
+        if (!val) { input.value = ''; return; }
+        val = (parseInt(val) / 100).toFixed(2);
+        input.value = 'R$ ' + val.replace('.', ',');
+    }
+
+    function fmtBRL(n) {
+        return 'R$ ' + n.toFixed(2).replace('.', ',');
+    }
+
+    function fmtPct(n) {
+        return n.toFixed(1).replace('.', ',') + '%';
+    }
+
+    // Tab switching
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.comparison').forEach(c => c.classList.remove('active'));
+        document.querySelector('.tab.' + tab).classList.add('active');
+        document.getElementById('comp-' + tab).classList.add('active');
+    }
+
+    // Calculate
+    function calculate(type) {
+        if (type === 'heineken') {
+            const hCusto = parseMoney(document.getElementById('h-custo').value);
+            const hVenda = parseMoney(document.getElementById('h-venda').value);
+            const oCusto = parseMoney(document.getElementById('o-custo').value);
+            const oVenda = parseMoney(document.getElementById('o-venda').value);
+            const qty = parseInt(document.getElementById('h-qty').value) || 0;
+
+            const hUnit = hCusto / 24;
+            const oUnit = oCusto / 24;
+
+            document.getElementById('h-custo-unit').textContent = hCusto ? fmtBRL(hUnit) : 'R$ 0,00';
+            document.getElementById('o-custo-unit').textContent = oCusto ? fmtBRL(oUnit) : 'R$ 0,00';
+
+            if (!hCusto || !hVenda || !oCusto || !oVenda) {
+                document.getElementById('results-heineken').innerHTML = renderEmpty();
+                return;
+            }
+
+            const hMargin = hVenda - hUnit;
+            const oMargin = oVenda - oUnit;
+            const hPct = (hMargin / hVenda) * 100;
+            const oPct = (oMargin / oVenda) * 100;
+            const diffUnit = hMargin - oMargin;
+            const diffTotal = diffUnit * qty;
+            const isPositive = diffUnit >= 0;
+
+            document.getElementById('results-heineken').innerHTML = renderResults({
+                brand1: 'Heineken', class1: 'heineken',
+                brand2: 'Original', class2: 'original',
+                margin1: hMargin, margin2: oMargin,
+                pct1: hPct, pct2: oPct,
+                diffUnit, diffTotal, qty, isPositive
+            });
+        } else {
+            const aCusto = parseMoney(document.getElementById('a-custo').value);
+            const aVenda = parseMoney(document.getElementById('a-venda').value);
+            const antCusto = parseMoney(document.getElementById('ant-custo').value);
+            const antVenda = parseMoney(document.getElementById('ant-venda').value);
+            const qty = parseInt(document.getElementById('a-qty').value) || 0;
+
+            const aUnit = aCusto / 24;
+            const antUnit = antCusto / 24;
+
+            document.getElementById('a-custo-unit').textContent = aCusto ? fmtBRL(aUnit) : 'R$ 0,00';
+            document.getElementById('ant-custo-unit').textContent = antCusto ? fmtBRL(antUnit) : 'R$ 0,00';
+
+            if (!aCusto || !aVenda || !antCusto || !antVenda) {
+                document.getElementById('results-amstel').innerHTML = renderEmpty();
+                return;
+            }
+
+            const aMargin = aVenda - aUnit;
+            const antMargin = antVenda - antUnit;
+            const aPct = (aMargin / aVenda) * 100;
+            const antPct = (antMargin / antVenda) * 100;
+            const diffUnit = aMargin - antMargin;
+            const diffTotal = diffUnit * qty;
+            const isPositive = diffUnit >= 0;
+
+            document.getElementById('results-amstel').innerHTML = renderResults({
+                brand1: 'Amstel', class1: 'amstel',
+                brand2: 'Antártica', class2: 'antartica',
+                margin1: aMargin, margin2: antMargin,
+                pct1: aPct, pct2: antPct,
+                diffUnit, diffTotal, qty, isPositive
+            });
+        }
+    }
+
+    function renderEmpty() {
+        return `
+            <div class="empty-state">
+                <div class="icon">📊</div>
+                <p>Preencha os valores de custo e venda<br>para ver a comparação de margens</p>
+            </div>
+        `;
+    }
+
+    function renderResults({ brand1, class1, brand2, class2, margin1, margin2, pct1, pct2, diffUnit, diffTotal, qty, isPositive }) {
+        const maxMargin = Math.max(margin1, margin2, 0.01);
+        const bar1Width = Math.min((margin1 / maxMargin) * 100, 100);
+        const bar2Width = Math.min((margin2 / maxMargin) * 100, 100);
+
+        const highlightLabel = isPositive
+            ? `GANHO A MAIS COM ${brand1.toUpperCase()}`
+            : `${brand2.toUpperCase()} DÁ MAIS MARGEM`;
+
+        const hlDesc = qty > 0
+            ? `em ${qty.toLocaleString('pt-BR')} unidades vendidas`
+            : 'informe a quantidade para ver o total';
+
+        return `
+            <div class="result-header">Comparativo de Margem</div>
+
+            <div class="margin-cards">
+                <div class="margin-card ${class1}">
+                    <div class="label">${brand1}</div>
+                    <div class="value">${fmtBRL(margin1)}</div>
+                    <div class="percent">margem ${fmtPct(pct1)}</div>
+                </div>
+                <div class="margin-card ${class2}">
+                    <div class="label">${brand2}</div>
+                    <div class="value">${fmtBRL(margin2)}</div>
+                    <div class="percent">margem ${fmtPct(pct2)}</div>
+                </div>
+            </div>
+
+            <div class="visual-compare">
+                <div class="vc-title">Margem por unidade</div>
+                <div class="bar-group">
+                    <div class="bar-label">
+                        <span>${brand1}</span>
+                        <span>${fmtBRL(margin1)}</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill ${class1}" style="width: ${bar1Width}%"></div>
+                    </div>
+                </div>
+                <div class="bar-group">
+                    <div class="bar-label">
+                        <span>${brand2}</span>
+                        <span>${fmtBRL(margin2)}</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill ${class2}" style="width: ${bar2Width}%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-card ${isPositive ? '' : 'negative'}">
+                <div class="hl-label">${highlightLabel}</div>
+                <div class="hl-diff-unit">${fmtBRL(Math.abs(diffUnit))} por unidade</div>
+                ${qty > 0 ? `<div class="hl-total">${fmtBRL(Math.abs(diffTotal))}</div>` : ''}
+                <div class="hl-desc">${hlDesc}</div>
+            </div>
+
+            ${qty > 0 ? `
+            <div class="breakdown">
+                <div class="breakdown-title">Detalhamento</div>
+                <div class="breakdown-row">
+                    <span class="br-label">Lucro total ${brand1}</span>
+                    <span class="br-value">${fmtBRL(margin1 * qty)}</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="br-label">Lucro total ${brand2}</span>
+                    <span class="br-value">${fmtBRL(margin2 * qty)}</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="br-label">Diferença no período</span>
+                    <span class="br-value ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : '-'} ${fmtBRL(Math.abs(diffTotal))}</span>
+                </div>
+            </div>
+            ` : ''}
+        `;
+    }
+
+    // Reset
+    function resetForm(type) {
+        if (type === 'heineken') {
+            ['h-custo', 'h-venda', 'o-custo', 'o-venda', 'h-qty'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('h-custo-unit').textContent = 'R$ 0,00';
+            document.getElementById('o-custo-unit').textContent = 'R$ 0,00';
+            document.getElementById('results-heineken').innerHTML = '';
+        } else {
+            ['a-custo', 'a-venda', 'ant-custo', 'ant-venda', 'a-qty'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('a-custo-unit').textContent = 'R$ 0,00';
+            document.getElementById('ant-custo-unit').textContent = 'R$ 0,00';
+            document.getElementById('results-amstel').innerHTML = '';
+        }
+    }
+</script>
+
+</body>
+</html>
