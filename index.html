@@ -349,7 +349,7 @@
 
     <div class="qty-card">
         <div class="qty-info">
-            <label>Qtd vendida (un/mês)</label>
+            <label>Qtd vendida (cx/mês)</label>
             <div class="helper">Heineken x Original</div>
         </div>
         <input type="tel" id="h-qty" placeholder="0" oninput="calculate('heineken')">
@@ -398,7 +398,7 @@
 
     <div class="qty-card">
         <div class="qty-info">
-            <label>Qtd vendida (un/mês)</label>
+            <label>Qtd vendida (cx/mês)</label>
             <div class="helper">Amstel x Antártica</div>
         </div>
         <input type="tel" id="a-qty" placeholder="0" oninput="calculate('amstel')">
@@ -520,7 +520,7 @@
             : `${brand2.toUpperCase()} DÁ MAIS MARGEM`;
 
         const hlDesc = qty > 0
-            ? `em ${qty.toLocaleString('pt-BR')} unidades vendidas`
+            ? `em ${qty.toLocaleString('pt-BR')} caixas vendidas`
             : 'informe a quantidade para ver o total';
 
         return `
@@ -540,11 +540,11 @@
             </div>
 
             <div class="visual-compare">
-                <div class="vc-title">Margem por unidade</div>
+                <div class="vc-title">Lucro por caixa (24un)</div>
                 <div class="bar-group">
                     <div class="bar-label">
                         <span>${brand1}</span>
-                        <span>${fmtBRL(margin1)}</span>
+                        <span>${fmtBRL(margin1 * 24)}</span>
                     </div>
                     <div class="bar-track">
                         <div class="bar-fill ${class1}" style="width: ${bar1Width}%"></div>
@@ -553,7 +553,7 @@
                 <div class="bar-group">
                     <div class="bar-label">
                         <span>${brand2}</span>
-                        <span>${fmtBRL(margin2)}</span>
+                        <span>${fmtBRL(margin2 * 24)}</span>
                     </div>
                     <div class="bar-track">
                         <div class="bar-fill ${class2}" style="width: ${bar2Width}%"></div>
@@ -563,8 +563,8 @@
 
             <div class="highlight-card ${isPositive ? '' : 'negative'}">
                 <div class="hl-label">${highlightLabel}</div>
-                <div class="hl-diff-unit">${fmtBRL(Math.abs(diffUnit))} por unidade</div>
-                ${qty > 0 ? `<div class="hl-total">${fmtBRL(Math.abs(diffTotal))}</div>` : ''}
+                <div class="hl-diff-unit">${fmtBRL(Math.abs(diffUnit * 24))} por caixa</div>
+                ${qty > 0 ? `<div class="hl-total">${fmtBRL(Math.abs(diffTotal * 24))}</div>` : ''}
                 <div class="hl-desc">${hlDesc}</div>
             </div>
 
@@ -573,15 +573,15 @@
                 <div class="breakdown-title">Detalhamento</div>
                 <div class="breakdown-row">
                     <span class="br-label">Lucro total ${brand1}</span>
-                    <span class="br-value">${fmtBRL(margin1 * qty)}</span>
+                    <span class="br-value">${fmtBRL(margin1 * 24 * qty)}</span>
                 </div>
                 <div class="breakdown-row">
                     <span class="br-label">Lucro total ${brand2}</span>
-                    <span class="br-value">${fmtBRL(margin2 * qty)}</span>
+                    <span class="br-value">${fmtBRL(margin2 * 24 * qty)}</span>
                 </div>
                 <div class="breakdown-row">
                     <span class="br-label">Diferença no período</span>
-                    <span class="br-value ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : '-'} ${fmtBRL(Math.abs(diffTotal))}</span>
+                    <span class="br-value ${isPositive ? 'positive' : 'negative'}">${isPositive ? '+' : '-'} ${fmtBRL(Math.abs(diffTotal * 24))}</span>
                 </div>
             </div>
             ` : ''}
